@@ -4,27 +4,27 @@ mercadopago.configurations.setAccessToken(process.env.MP_ACCESS_TOKEN);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método não permitido" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, amount, currency, frequency } = req.body;
-
   try {
-    const plan = await mercadopago.preapproval.createPlan({
-      back_url: "https://www.seusite.com.br",
-      reason: name,
+    const planData = {
+      reason: "Assinatura Colesterol Control",
       auto_recurring: {
-        frequency: frequency || 1,
+        frequency: 1,
         frequency_type: "months",
-        transaction_amount: amount,
-        currency_id: currency || "BRL",
+        transaction_amount: 100,
+        currency_id: "BRL",
         start_date: new Date().toISOString(),
       },
-    });
+      back_url: "https://seu-app.vercel.app",
+      status: "active",
+    };
 
-    return res.status(200).json(plan.response);
+    const plan = await mercadopago.preapproval.create(planData);
+    res.status(200).json(plan);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 }
