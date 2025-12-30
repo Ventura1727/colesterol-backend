@@ -1,21 +1,25 @@
 import mercadopago from "mercadopago";
 
-// Inicializa o SDK
-mercadopago.configurations.setAccessToken(process.env.MERCADO_PAGO_TOKEN);
+mercadopago.configurations.setAccessToken(process.env.MP_ACCESS_TOKEN);
 
 export default async function handler(req, res) {
-  try {
-    const { plan_id, payer_email } = req.body;
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Método não permitido" });
+  }
 
-    const subscriptionData = {
+  const { plan_id, payer_email } = req.body;
+
+  try {
+    const subscription = await mercadopago.preapproval.createSubscription({
       preapproval_plan_id: plan_id,
       payer_email: payer_email,
-      back_url: "https://seu-app.com/success"
-    };
+      back_url: "https://www.seusite.com.br",
+      reason: "Assinatura Teste",
+    });
 
-    const response = await mercadopago.preapproval.create(subscriptionData);
-    res.status(200).json(response.body);
+    return res.status(200).json(subscription.response);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ error: error.message });
   }
 }
