@@ -1,5 +1,6 @@
 import mercadopago from "mercadopago";
 
+// Configura o token do Mercado Pago
 mercadopago.configurations.setAccessToken(process.env.MP_ACCESS_TOKEN);
 
 export default async function handler(req, res) {
@@ -15,10 +16,10 @@ export default async function handler(req, res) {
         frequency_type: "months",
         transaction_amount: 100,
         currency_id: "BRL",
-        start_date: new Date().toISOString(),
+        start_date: new Date().toISOString()
       },
       back_url: "https://seu-app.vercel.app",
-      status: "active",
+      status: "active"
     };
 
     const plan = await mercadopago.preapproval.create(planData);
