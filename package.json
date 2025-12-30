@@ -6,6 +6,6 @@
     "start": "node api/status.js"
   },
   "dependencies": {
-    "mercadopago": "^3.0.0"
+    "mercadopago": "^4.6.0"
   }
 }
