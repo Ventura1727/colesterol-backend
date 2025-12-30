@@ -1,8 +1,11 @@
 {
-  "name": "colesterol-backend",
+  "name": "colesterol-control-backend",
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "start": "node api/status.js"
+  },
   "dependencies": {
-    "mercadopago": "^2.3.0"
+    "mercadopago": "^3.0.0"
   }
 }
